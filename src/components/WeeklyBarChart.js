@@ -1,10 +1,21 @@
+// File: src/components/WeeklyBarChart.js
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 const WeeklyBarChart = ({ data }) => {
-  const past7Days = new Date();
-  past7Days.setDate(past7Days.getDate() - 7);
-  const filteredData = data.filter((item) => new Date(item.date) >= past7Days);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const past7Days = new Date(today);
+  past7Days.setDate(today.getDate() - 7);
+
+  const filteredData = data.filter((item) => {
+    const itemDate = new Date(item.date);
+    itemDate.setHours(0, 0, 0, 0);
+    return itemDate >= past7Days && itemDate <= today;
+  });
+
+  if (filteredData.length === 0) return null;
 
   return (
     <div>
